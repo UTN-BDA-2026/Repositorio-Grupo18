@@ -1,0 +1,47 @@
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.v1.router import api_router
+from app.core.config import settings
+from app.db.postgres import engine
+from app.models.sql import Base
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Crear las tablas de PostgreSQL si no existen.
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield
+    
+    await engine.dispose()
+
+# Configurar la aplicacion FastAPI
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    lifespan=lifespan,
+)
+
+# Middleware para el acceso CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # quitar en produccion para solo permitir el frontend 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+# Rutas de la API
+@app.get("/")
+def read_root():
+    return {"APP": "SMART FARMING🐮"}
+
+app.include_router(api_router)
