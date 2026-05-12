@@ -429,6 +429,7 @@ Los patrones se cargan con `python scripts/seed_patterns.py`. En producción se 
 
 
 ## ENVIROMENTS
+```
 # ── App ───────────────────────────────────────────────────────────────────────
 DEBUG=false
 
@@ -438,4 +439,4 @@ POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=changeme
 POSTGRES_DB=smartfarming
-
+```
