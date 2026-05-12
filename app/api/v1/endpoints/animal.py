@@ -10,7 +10,7 @@ from app.schemas.schemas import AnimalCreate, AnimalRead
 
 router = APIRouter(prefix="/animal", tags=["Animal"])
 
-
+# OBTENER TODOS LOS ANIMALES
 @router.get("", response_model=list[AnimalRead])
 async def list_animals(
     skip: int = 0,
@@ -22,7 +22,7 @@ async def list_animals(
     )
     return result.scalars().all()
 
-
+# CREAR UN NUEVO ANIMAL
 @router.post("", response_model=AnimalRead, status_code=status.HTTP_201_CREATED)
 async def create_animal(
     payload: AnimalCreate,
@@ -34,7 +34,7 @@ async def create_animal(
     await db.refresh(animal)
     return animal
 
-
+# OBTENER UN ANIMAL POR ID
 @router.get("/{animal_id}", response_model=AnimalRead)
 async def get_animal(animal_id: UUID, db: AsyncSession = Depends(get_db)):
     animal = await db.get(Animal, animal_id)
@@ -42,7 +42,7 @@ async def get_animal(animal_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Animal not found")
     return animal
 
-
+# ACTUALIZAR UN ANIMAL
 @router.patch("/{animal_id}", response_model=AnimalRead)
 async def update_animal(
     animal_id: UUID,
@@ -58,7 +58,7 @@ async def update_animal(
     await db.refresh(animal)
     return animal
 
-
+# DESACTIVAR UN ANIMAL (LOGICO)
 @router.delete("/{animal_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deactivate_animal(animal_id: UUID, db: AsyncSession = Depends(get_db)):
     animal = await db.get(Animal, animal_id)

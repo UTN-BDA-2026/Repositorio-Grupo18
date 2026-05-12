@@ -5,8 +5,7 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
 
 
-# ── User ──────────────────────────────────────────────────────────────────
-
+# USER
 class UserBase(BaseModel):
     name: str = Field(..., max_length=120)
     email: EmailStr
@@ -26,8 +25,7 @@ class UserRead(UserBase):
     model_config = {"from_attributes": True}
 
 
-# ── Ground ────────────────────────────────────────────────────────────────
-
+# GROUND
 class GroundBase(BaseModel):
     name: str = Field(..., max_length=120)
     geofence: Optional[str] = None      # GeoJSON Polygon string
@@ -46,8 +44,7 @@ class GroundRead(GroundBase):
     model_config = {"from_attributes": True}
 
 
-# ── Animal ─────────────────────────────────────────────────────────────────
-
+# ANIMAL
 class AnimalBase(BaseModel):
     tag: str = Field(..., max_length=50, description="Unique ear-tag or RFID number")
     species: str = Field(..., max_length=80)

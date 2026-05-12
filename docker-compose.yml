@@ -1,7 +1,5 @@
-version: "3.9"
-
 services:
-  # ── FastAPI application ─────────────────────────────────────────────────────
+  # ── FastAPI  ─────────────────────────────────────────────────────
   api:
     build: .
     container_name: smartfarming_api

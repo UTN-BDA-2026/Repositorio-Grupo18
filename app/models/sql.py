@@ -19,8 +19,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.config import settings
 from app.db.postgres import Base
 
-# ================= MODELOS =================
-
 
 # ================ USUARIOS ================
 
@@ -54,7 +52,7 @@ class User(Base):
 
 
 
-# ── GROUND ────────────────────────────────────────────────────────────────
+# ================ LOTES DE PASTOREO ================
 
 class Ground(Base):
     # Terreno de la granja, donde pastorean los animales
@@ -78,7 +76,7 @@ class Ground(Base):
     users: Mapped[Optional["User"]] = relationship(back_populates="ground")
 
 
-# ── Animal ─────────────────────────────────────────────────────────────────
+# ================ ANIMALES / GANADO ================
 
 class Animal(Base):
     # Animal individual con sus datos
@@ -102,5 +100,5 @@ class Animal(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    # relationships
+    # relaciones
     users: Mapped[Optional["User"]] = relationship(back_populates="animal")

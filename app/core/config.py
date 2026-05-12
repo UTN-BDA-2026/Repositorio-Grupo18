@@ -3,12 +3,12 @@ from typing import Optional
 
 
 class Settings(BaseSettings):
-    # ── App ──────────────────────────────────────────────────────────────────
+    # App 
     APP_NAME: str = "SmartFarming API"
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = False
 
-    # ── PostgreSQL ────────────────────────────────────────────────────────────
+    # PostgreSQL 
     POSTGRES_HOST: str = "localhost"
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str = "postgres"
