@@ -150,8 +150,17 @@ git clone https://github.com/tu-usuario/smartfarming-api.git
 cd smartfarming-api
 
 # 2. Crear archivo de variables de entorno
-cp .env.example .env
-# Podés dejar los valores por defecto para desarrollo
+
+# ── App ───────────────────────────────────────────────────────────────────────
+DEBUG=false
+
+# ── PostgreSQL ────────────────────────────────────────────────────────────────
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=changeme
+POSTGRES_DB=smartfarming
+
 
 # 3. Construir y levantar todos los servicios
 docker compose up --build
