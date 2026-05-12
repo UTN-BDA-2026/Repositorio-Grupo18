@@ -229,8 +229,17 @@ git clone https://github.com/tu-usuario/smartfarming-api.git
 cd smartfarming-api
 
 # 2. Crear archivo de variables de entorno
-cp .env.example .env
-# Podés dejar los valores por defecto para desarrollo
+
+# ── App ───────────────────────────────────────────────────────────────────────
+DEBUG=false
+
+# ── PostgreSQL ────────────────────────────────────────────────────────────────
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=changeme
+POSTGRES_DB=smartfarming
+
 
 # 3. Construir y levantar todos los servicios
 docker compose up --build
@@ -426,17 +435,3 @@ Los patrones se cargan con `python scripts/seed_patterns.py`. En producción se 
 | PostgreSQL | 16 | Base de datos relacional |
 | MongoDB | 7.0 | Base de datos de telemetría |
 | Redis | 7.2 | Broker de tareas |
-
-
-## ENVIROMENTS
-```
-# ── App ───────────────────────────────────────────────────────────────────────
-DEBUG=false
-
-# ── PostgreSQL ────────────────────────────────────────────────────────────────
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=changeme
-POSTGRES_DB=smartfarming
-```
