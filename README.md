@@ -107,7 +107,7 @@ behavior_patterns (no implementado aún)
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/smartfarming-api.git
+git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
 cd smartfarming-api
 
 # 2. Crear entorno virtual
