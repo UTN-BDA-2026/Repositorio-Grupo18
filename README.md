@@ -1,6 +1,6 @@
 # 🐄 SmartFarming API 
 
-Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter](https://haltercollars.com/). Cada animal lleva un collar **ESP32** que transmite telemetría GPS + acelerómetro. El backend almacena, analiza y genera alertas en tiempo real usando una arquitectura **polígola** (PostgreSQL + MongoDB + pgvector).
+Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter](https://www.halterhq.com/). Cada animal lleva un collar **ESP32** que transmite telemetría GPS + acelerómetro. El backend almacena, analiza y genera alertas en tiempo real usando una arquitectura **polígola** (PostgreSQL + MongoDB + pgvector).
 
 
 ## INTEGRANTES DEL GRUPO 18: 
