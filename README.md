@@ -6,7 +6,7 @@ Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter]
 ## INTEGRANTES DEL GRUPO 18: 
 * Bru Paulo
 * Cano Juan
-* Juarez Martin
+* Juarez Martín
 * La Loggia Martín
 * Méndez Jesús
 
