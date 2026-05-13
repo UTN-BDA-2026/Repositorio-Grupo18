@@ -139,8 +139,8 @@ Docker Compose levanta todos los servicios con un solo comando: la API, Postgres
 
 ### Requisitos
 
-- Docker 24+
-- Docker Compose v2+
+- Docker
+- Docker Compose
 
 ### Pasos
 
