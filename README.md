@@ -108,7 +108,7 @@ behavior_patterns (no implementado aún)
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
-cd smartfarming-api
+cd Repositorio-Grupo18
 
 # 2. Crear entorno virtual
 python -m venv .venv
@@ -146,8 +146,8 @@ Docker Compose levanta todos los servicios con un solo comando: la API, Postgres
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/smartfarming-api.git
-cd smartfarming-api
+git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
+cd Repositorio-Grupo18
 
 # 2. Crear archivo de variables de entorno
 
