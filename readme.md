@@ -1,4 +1,4 @@
-# 🐄 SmartFarming API
+# 🐄 SmartFarming API 
 
 Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter](https://www.halterhq.com/). Cada animal lleva un collar **ESP32** que transmite telemetría GPS + acelerómetro. El backend almacena, analiza y genera alertas en tiempo real usando una arquitectura **polígola** (PostgreSQL + MongoDB + pgvector).
 
@@ -6,7 +6,7 @@ Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter]
 ## INTEGRANTES DEL GRUPO 18: 
 * Bru Paulo
 * Cano Juan
-* Juarez Martin
+* Juarez Martín
 * La Loggia Martín
 * Méndez Jesús
 
@@ -107,8 +107,8 @@ behavior_patterns (no implementado aún)
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/smartfarming-api.git
-cd smartfarming-api
+git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
+cd Repositorio-Grupo18
 
 # 2. Crear entorno virtual
 python -m venv .venv
@@ -139,15 +139,15 @@ Docker Compose levanta todos los servicios con un solo comando: la API, Postgres
 
 ### Requisitos
 
-- Docker 24+
-- Docker Compose v2+
+- Docker
+- Docker Compose
 
 ### Pasos
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/smartfarming-api.git
-cd smartfarming-api
+git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
+cd Repositorio-Grupo18
 
 # 2. Crear archivo de variables de entorno
 
@@ -156,4 +156,5 @@ docker compose up --build
 
 # La API estará disponible en http://localhost:8000
 ```
+
 
