@@ -7,6 +7,10 @@ sqlalchemy==2.0.35
 asyncpg==0.29.0
 pgvector==0.3.2
 
+# ── MongoDB (async) ───────────────────────────────────────────────────────────
+pymongo>=4.9,<4.10
+motor>=3.6.0
+
 # ── Validation & settings
 pydantic==2.9.2
 pydantic-settings==2.5.2
@@ -14,6 +18,7 @@ email-validator==2.2.0
 
 # ── Numerics
 numpy==2.1.1
+shapely==2.0.1
 
 # ── Auth (JWT)
 python-jose[cryptography]==3.3.0

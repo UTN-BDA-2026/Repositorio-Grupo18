@@ -30,7 +30,7 @@ class GroundBase(BaseModel):
     name: str = Field(..., max_length=120)
     geofence: Optional[str] = None      # GeoJSON Polygon string
     area_hectares: Optional[float] = None
-    user_id: Optional[uuid.UUID] = None
+    users_id: Optional[uuid.UUID] = None
 
 
 class GroundCreate(GroundBase):
@@ -64,6 +64,30 @@ class AnimalRead(AnimalBase):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+    
+
+
+# ── HealthAlert ───────────────────────────────────────────────────────────────
+
+class HealthAlertBase(BaseModel):
+    animal_id: uuid.UUID
+    alert_type: str = Field(..., max_length=50)
+    pattern_label: Optional[str] = Field(None, max_length=100)
+    similarity_score: Optional[float] = Field(None, ge=0, le=1)
+    message: str
+
+
+class HealthAlertCreate(HealthAlertBase):
+    pass
+
+
+class HealthAlertRead(HealthAlertBase):
+    id: uuid.UUID
+    resolved: bool
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
 
 # DEVICE
 class DeviceBase(BaseModel):

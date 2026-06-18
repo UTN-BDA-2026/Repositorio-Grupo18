@@ -1,6 +1,5 @@
 """
 Ingest endpoint — called by the ESP32 collar every few seconds.
-Kept intentionally thin; all logic lives in TelemetryService.
 """
 
 from fastapi import APIRouter, BackgroundTasks, Depends, status
