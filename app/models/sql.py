@@ -102,3 +102,34 @@ class Animal(Base):
 
     # relaciones
     users: Mapped[Optional["User"]] = relationship(back_populates="animal")
+
+
+# ================ DISPOSITIVO (collar) ================
+class Device(Base):
+    # ESP32 collar.
+
+    __tablename__ = "devices"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    # ID del ESP32 (collar)
+    hardware_id: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    firmware_version: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    battery_pct: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    last_seen: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    animal_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("animal.id", ondelete="SET NULL"),
+        unique=True,
+        nullable=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    # relaciones
+    animal: Mapped[Optional["Animal"]] = relationship(back_populates="device")

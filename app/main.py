@@ -15,8 +15,15 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+    # Inicializar Mongo DB
+    db = get_mongo_db()
+    await db["telemetry"].create_index(
+        [("device_hardware_id", 1), ("timestamp", -1)]
+    )
+    
     yield
     
+    await close_mongo()
     await engine.dispose()
 
 # Configurar la aplicacion FastAPI

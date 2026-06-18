@@ -1,6 +1,6 @@
 # 🐄 SmartFarming API
 
-Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter](https://haltercollars.com/). Cada animal lleva un collar **ESP32** que transmite telemetría GPS + acelerómetro. El backend almacena, analiza y genera alertas en tiempo real usando una arquitectura **polígola** (PostgreSQL + MongoDB + pgvector).
+Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter](https://www.halterhq.com/). Cada animal lleva un collar **ESP32** que transmite telemetría GPS + acelerómetro. El backend almacena, analiza y genera alertas en tiempo real usando una arquitectura **polígola** (PostgreSQL + MongoDB + pgvector).
 
 
 ## INTEGRANTES DEL GRUPO 18: 
@@ -150,17 +150,6 @@ git clone https://github.com/tu-usuario/smartfarming-api.git
 cd smartfarming-api
 
 # 2. Crear archivo de variables de entorno
-
-# ── App ───────────────────────────────────────────────────────────────────────
-DEBUG=false
-
-# ── PostgreSQL ────────────────────────────────────────────────────────────────
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=changeme
-POSTGRES_DB=smartfarming
-
 
 # 3. Construir y levantar todos los servicios
 docker compose up --build
