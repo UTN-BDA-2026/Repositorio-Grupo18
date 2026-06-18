@@ -124,7 +124,7 @@ cp .env.example .env
 psql -U postgres -d smartfarming -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
 # 6. Cargar patrones de comportamiento de referencia
-python scripts/seed_patterns.py
+python scripts/simulation_data.py
 
 # 7. Levantar el servidor
 uvicorn app.main:app --reload --port 8000
