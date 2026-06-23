@@ -1,0 +1,19 @@
+-- CREAR INDICE PARA LA TABLA DE ANIMALES POR ESPECIE
+CREATE INDEX IF NOT EXISTS idx_animal_species
+    ON animal (species);
+
+-- CREAR INDICE PARA LA TABLAA DE USUARIOS POR EMAILS
+CREATE INDEX IF NOT EXISTS idx_user_email
+    ON users (email);
+
+-- CREAR INDICE COMPUESTO PARA LA TABLA DE ANIMALES POR ESPECIE Y SEXO
+CREATE INDEX IF NOT EXISTS idx_animal_species_sex
+    ON animal (species, sex);
+
+-- CREAR INDICE DE DEVICE POR USUARIO
+CREATE INDEX IF NOT EXISTS idx_device_users
+    ON device (users_id);
+
+-- CREAR INDICE DE GROUNDS POR USUARIO
+CREATE INDEX IF NOT EXISTS idx_ground_users
+    ON ground (users_id);
