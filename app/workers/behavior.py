@@ -98,4 +98,34 @@ async def _run_similarity_check(
         {"vec": vector_literal},
     )
     row = result.fetchone()
-... (32 líneas restantes)
+
+    if row is None:
+        logger.info("No reference patterns found in DB. Skipping.")
+        return
+
+    similarity: float = float(row.similarity)
+    label: str = row.label
+
+    logger.info(
+        "Animal %s → best match: '%s' (similarity=%.3f)",
+        animal_id, label, similarity,
+    )
+
+    # Si la similitud supera el umbral y el patrón es preocupante, crear una alerta de salud
+    is_concerning = not label.startswith("healthy")
+    if similarity >= settings.ALERT_SIMILARITY_THRESHOLD and is_concerning:
+        alert = HealthAlert(
+            animal_id=uuid.UUID(animal_id),
+            alert_type="behavior",
+            pattern_label=label,
+            similarity_score=similarity,
+            message=(
+                f"Behavior pattern '{label}' detected with "
+                f"{similarity * 100:.1f}% confidence."
+            ),
+        )
+        db.add(alert)
+        await db.commit()
+        logger.warning(
+            "🚨 Alert created for animal %s — pattern: %s", animal_id, label
+        )
