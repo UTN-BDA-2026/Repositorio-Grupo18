@@ -1,10 +1,10 @@
 """
-Inyecta ~1 millón de filas distribuidas en las tablas:
+Inyecta 1 millón de filas distribuidas en las tablas:
   - users    →  1.000 filas
   - ground   →  5.000 filas
   - animal   →  994.000 filas
 
-Total: ~1.000.000 filas
+Total: 1.000.000 filas
 Uso: docker compose exec api python scripts/simulation_data.py
 """
 import sys
@@ -25,14 +25,14 @@ from app.models.sql import Base
 
 # =========== CONFIGURACIÓN ===========
 # númeroo de filas para las tablas
-N_USERS   = 1#1_000  
-N_GROUNDS = 0#5_000
-N_ANIMALS = 5#994_000
-BATCH     = 1#5_000 
+N_USERS   = 1_000  
+N_GROUNDS = 5_000
+N_ANIMALS = 994_000
+BATCH     = 5_000 
 
 # =========== DATOS PARA SIMULAR ===========
 COUNTRIES   = ["Argentina", "Brasil", "Uruguay", "Chile", "Paraguay", "Bolivia"]
-ROLES       = ["admin", "granjero", "veterinario"]
+ROLES       = ["admin", "users", "vet"]
 SPECIES     = ["vaca", "oveja", "cabra", "cerdo", "llama"]
 SEXES       = ["M", "F"]
 
