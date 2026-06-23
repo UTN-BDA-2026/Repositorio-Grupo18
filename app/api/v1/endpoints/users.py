@@ -1,3 +1,5 @@
+"""User endpoint """
+
 from uuid import UUID
 
 import bcrypt
@@ -43,6 +45,8 @@ async def create_user(
             bcrypt.gensalt()
         ).decode("utf-8"),
         role=payload.role,
+        country=payload.country,
+        is_active=True
     )
     db.add(user)
     await db.flush()
