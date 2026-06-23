@@ -1,4 +1,4 @@
-"""Telemetry query endpoint — reads from MongoDB"""
+"""Telemetry endpoint """
 from fastapi import APIRouter, Query
 from app.services.telemetry import TelemetryService
 
@@ -10,5 +10,5 @@ async def get_telemetry(
     hardware_id: str,
     limit: int = Query(default=100, le=1000),
 ):
-    """retornar las últimas lecturas de un collar"""
+    """retornar las ultimas lecturas de un collar"""
     return await TelemetryService.get_recent(hardware_id, limit)
