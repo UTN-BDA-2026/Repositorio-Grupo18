@@ -1,13 +1,6 @@
 """
-seed_patterns.py
-────────────────
-Populates the behavior_patterns table with synthetic reference vectors.
-
-In a real project these vectors would come from labelled field data.
-For the faculty project, we simulate plausible feature distributions
-for each behavioral state and insert them as reference embeddings.
-
-Usage:
+Creamos un conjunto de patrones de comportamiento de ejemplo para la base de datos.
+Uso:
     python scripts/seed_patterns.py
 """
 
@@ -26,38 +19,36 @@ from app.models.sql import Base, BehaviorPattern
 
 DIM = settings.BEHAVIOR_VECTOR_DIM
 
-# (label, description, mean_vector_hint)
-# The hint is just the mean; we add small Gaussian noise to simulate
-# natural variation between animals.
+# Definimos algunos patrones de comportamiento de ejemplo con descripciones y vectores base.
 PATTERNS = [
     (
         "healthy_grazing",
-        "Normal grazing behavior: slow rhythmic head movements, low acceleration variance.",
+        "Comportamiento normal de pastoreo: movimiento moderado con picos de actividad durante el día.",
         np.array([0.1, 0.05, 0.2] * (DIM // 3) + [0.1] * (DIM % 3)),
     ),
     (
         "healthy_resting",
-        "Animal lying down or standing still. Very low accelerometer activity.",
+        "Animal con bajo movimiento durante la noche, indicando descanso adecuado.",
         np.zeros(DIM) + 0.02,
     ),
     (
         "healthy_walking",
-        "Normal locomotion between grazing areas.",
+        "Movimiento constante con patrones regulares de aceleración, típico de un animal caminando por el campo.",
         np.array([0.5, 0.1, 0.6] * (DIM // 3) + [0.3] * (DIM % 3)),
     ),
     (
         "pre_calving",
-        "Restlessness before labor: frequent posture changes, increased movement variance.",
+        "Inquietud antes del parto: cambios frecuentes en la postura, aumento de la variación del movimiento.",
         np.array([0.8, 0.7, 0.9] * (DIM // 3) + [0.8] * (DIM % 3)),
     ),
     (
         "illness_lethargy",
-        "Sick animal: prolonged inactivity, abnormal low movement even at feeding time.",
+        "Animal enfermo: inactividad prolongada, movimiento anormalmente bajo incluso durante el tiempo de alimentación.",
         np.zeros(DIM) + 0.01,
     ),
     (
         "lameness",
-        "Irregular gait detected via asymmetric acceleration peaks across axes.",
+        "Marcha irregular detectada mediante picos de aceleración asimétricos a través de los ejes.",
         np.array([0.9, 0.2, 0.3] * (DIM // 3) + [0.5] * (DIM % 3)),
     ),
 ]
@@ -65,7 +56,6 @@ PATTERNS = [
 
 def _make_vector(base: np.ndarray, noise_scale: float = 0.03) -> list[float]:
     vec = base + np.random.normal(0, noise_scale, size=DIM)
-    # L2-normalize so cosine similarity makes sense
     norm = np.linalg.norm(vec)
     if norm > 0:
         vec /= norm
@@ -77,7 +67,7 @@ async def seed():
         await conn.run_sync(Base.metadata.create_all)
 
     async with AsyncSessionLocal() as db:
-        # Clear existing patterns
+        # Limpiamos la tabla de patrones de comportamiento antes de añadir nuevos datos.
         await db.execute(delete(BehaviorPattern))
 
         for label, description, base_vec in PATTERNS:
