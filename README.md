@@ -15,7 +15,6 @@ Backend para un sistema de monitoreo ganadero inteligente, inspirado en [Halter]
 ## Tabla de contenidos
 
 - [Modelos de datos](#modelos-de-datos)
-- [Instalación local](#instalación-local)
 - [Instalación con Docker](#instalación-con-docker)
 
 ### ¿Por qué tres bases de datos?
@@ -58,7 +57,7 @@ animals
   user_id → users.id
   is_active, created_at
 
-devices (no implementado aún)
+devices 
   id (UUID PK),
   hardware_id (MAC del ESP32, único),
   firmware_version,
@@ -67,13 +66,6 @@ devices (no implementado aún)
   animal_id → livestock.id  (1-to-1),
   is_active, 
   created_at
-
-grazing_sessions (no implementado aún)
-  id (UUID PK),
-  animal_id → livestock.id,
-  lot_id    → grazing_lots.id,
-  started_at, 
-  ended_at (NULL = sesión abierta)
 
 health_alerts (no implementado aún)
   id (UUID PK),
@@ -94,45 +86,6 @@ behavior_patterns (no implementado aún)
 ```
 
 ---
-
-## Instalación local
-
-### Prerrequisitos
-
-- Python 3.12+
-- PostgreSQL 16 con extensión `pgvector` instalada
-- MongoDB 7.0+
-
-### Pasos
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/UTN-BDA-2026/Repositorio-Grupo18.git
-cd Repositorio-Grupo18
-
-# 2. Crear entorno virtual
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-
-# 3. Instalar dependencias
-pip install -r requirements.txt
-
-# 4. Configurar variables de entorno
-cp .env.example .env
-
-# 5. Habilitar pgvector en tu Postgres local
-psql -U postgres -d smartfarming -c "CREATE EXTENSION IF NOT EXISTS vector;"
-
-# 6. Cargar patrones de comportamiento de referencia
-python scripts/simulation_data.py
-
-# 7. Levantar el servidor
-uvicorn app.main:app --reload --port 8000
-```
-
-Las tablas de Postgres se crean automáticamente al iniciar la app.
----
-
 ## Instalación con Docker
 
 Docker Compose levanta todos los servicios con un solo comando: la API, Postgres con pgvector.
@@ -155,6 +108,16 @@ cd Repositorio-Grupo18
 docker compose up --build
 
 # La API estará disponible en http://localhost:8000
-```
 
+# 4. Cargar patrones de comportamiento de referencia
+python scripts/seed_patterns.py
+
+# 5. Cargar 1 millón de datos en las tablas de forma repartida
+python scripts/simulation_data.py
+
+# 5. Crear particiones
+docker compose exec postgres psql -U postgres -d smartfarming \
+  -f /scripts/init_partitions.sql
+
+```
 
