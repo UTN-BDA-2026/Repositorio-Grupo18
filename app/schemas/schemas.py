@@ -4,7 +4,6 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
-
 # USER
 class UserBase(BaseModel):
     name: str = Field(..., max_length=120)
@@ -46,7 +45,6 @@ class GroundRead(GroundBase):
 
 # ANIMAL
 class AnimalBase(BaseModel):
-    tag: str = Field(..., max_length=50, description="Unique ear-tag or RFID number")
     species: str = Field(..., max_length=80)
     birth_date: Optional[datetime] = None
     sex: str = Field(..., pattern="^(M|F)$")
@@ -66,9 +64,7 @@ class AnimalRead(AnimalBase):
     model_config = {"from_attributes": True}
     
 
-
-# ── HealthAlert ───────────────────────────────────────────────────────────────
-
+# HEALTH ALERT 
 class HealthAlertBase(BaseModel):
     animal_id: uuid.UUID
     alert_type: str = Field(..., max_length=50)
