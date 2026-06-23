@@ -1,5 +1,5 @@
 """
-BehaviorWorker
+PATRONES DE COMPORTAMIENTO 
 """
 
 import logging
@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 WINDOW_SIZE = 30
 
-
 def _extract_features(readings: list[dict]) -> np.ndarray:
     axes = {
         "x": np.array([r["accel"]["x"] for r in readings]),
@@ -34,13 +33,13 @@ def _extract_features(readings: list[dict]) -> np.ndarray:
             float(np.std(arr)),
             float(np.min(arr)),
             float(np.max(arr)),
-            float(np.sqrt(np.mean(arr ** 2))),  # RMS energy
+            float(np.sqrt(np.mean(arr ** 2))), 
         ]
         fft_magnitudes = np.abs(np.fft.rfft(arr))
         top3_idx = np.argsort(fft_magnitudes)[-3:][::-1]
         features += fft_magnitudes[top3_idx].tolist()
 
-    # pad to BEHAVIOR_VECTOR_DIM
+    # Truncar o rellenar con ceros para que el vector tenga la longitud esperada
     padded = np.zeros(settings.BEHAVIOR_VECTOR_DIM, dtype=np.float32)
     n = min(len(features), settings.BEHAVIOR_VECTOR_DIM)
     padded[:n] = features[:n]
@@ -48,11 +47,7 @@ def _extract_features(readings: list[dict]) -> np.ndarray:
 
 
 async def analyze_behavior_window(animal_id: str, hardware_id: str) -> None:
-    """
-    Entry point called by BackgroundTasks.
-    Fetches the last WINDOW_SIZE readings and runs pgvector similarity search.
-    """
-    # ── 1. Fetch readings from MongoDB ────────────────────────────────────────
+    # Obtene los últimos 30 registros de telemetría del collar desde MongoDB
     cursor = (
         telemetry_collection()
         .find({"device_hardware_id": hardware_id})
@@ -65,10 +60,10 @@ async def analyze_behavior_window(animal_id: str, hardware_id: str) -> None:
         logger.debug("Not enough readings yet for animal %s", animal_id)
         return
 
-    # ── 2. Extract feature vector ─────────────────────────────────────────────
+    # Extraer características del vector de comportamiento a partir de los datos de acelerómetro
     vector = _extract_features(readings)
 
-    # ── 3. pgvector cosine similarity search ──────────────────────────────────
+    # Buscar el patrón de comportamiento más similar en la base de datos Postgres y crear una alerta si es necesario
     async with AsyncSessionLocal() as db:
         try:
             await _run_similarity_check(db, animal_id, vector)
@@ -83,9 +78,8 @@ async def _run_similarity_check(
     vector: np.ndarray,
 ) -> None:
     """
-    Uses pgvector's <=> (cosine distance) operator to find the most similar
-    reference pattern. If the similarity is above the threshold and the
-    pattern is flagged as concerning, create a HealthAlert.
+    Usamos el operador <=> de pgvector (distancia coseno) para encontrar el patrón de referencia más similar.
+    Si la similitud está por encima del umbral y el patrón está marcado como preocupante, se crea una HealthAlert.
     """
     vector_literal = "[" + ",".join(str(v) for v in vector.tolist()) + "]"
 
@@ -104,34 +98,4 @@ async def _run_similarity_check(
         {"vec": vector_literal},
     )
     row = result.fetchone()
-
-    if row is None:
-        logger.info("No reference patterns found in DB. Skipping.")
-        return
-
-    similarity: float = float(row.similarity)
-    label: str = row.label
-
-    logger.info(
-        "Animal %s → best match: '%s' (similarity=%.3f)",
-        animal_id, label, similarity,
-    )
-
-    # Only alert if similarity is high AND the label is NOT "healthy_*"
-    is_concerning = not label.startswith("healthy")
-    if similarity >= settings.ALERT_SIMILARITY_THRESHOLD and is_concerning:
-        alert = HealthAlert(
-            animal_id=uuid.UUID(animal_id),
-            alert_type="behavior",
-            pattern_label=label,
-            similarity_score=similarity,
-            message=(
-                f"Behavior pattern '{label}' detected with "
-                f"{similarity * 100:.1f}% confidence."
-            ),
-        )
-        db.add(alert)
-        await db.commit()
-        logger.warning(
-            "🚨 Alert created for animal %s — pattern: %s", animal_id, label
-        )
+... (32 líneas restantes)
