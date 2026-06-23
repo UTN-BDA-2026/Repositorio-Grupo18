@@ -1,5 +1,5 @@
 """
-Ingest endpoint — called by the ESP32 collar every few seconds.
+Ingest endpoint
 """
 
 from fastapi import APIRouter, BackgroundTasks, Depends, status
@@ -18,8 +18,6 @@ async def ingest_telemetry(
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
-    """
-    Receive a telemetry reading from an ESP32 collar.
-    Saves to MongoDB and queues behavior analysis asynchronously.
-    """
+    
+    # Recibimos la telemetrÃ­a de un collar ESP32. Guardamos en MongoDB.
     return await TelemetryService.ingest(payload, db, background_tasks)
