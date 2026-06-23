@@ -1,3 +1,4 @@
+"""Animal endpoint """
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -66,3 +67,31 @@ async def deactivate_animal(animal_id: UUID, db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=404, detail="Animal not found")
     animal.is_active = False
     await db.flush()
+
+# OBTENER EL ANIMAL POR SU COLLAR (HARDWARE_ID)
+@router.get("/by-hardware-id/{hardware_id}", response_model=AnimalRead)
+async def get_animal_by_hardware_id(
+    hardware_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Animal).where(Animal.hardware_id == hardware_id))
+    animal = result.scalar_one_or_none()
+    if not animal:
+        raise HTTPException(status_code=404, detail="Animal not found")
+    return animal
+
+# OBTENER ANIMALES POR ESPECIE
+@router.get("/by-species/{species}", response_model=list[AnimalRead])
+async def animals_by_species(species: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Animal).where(Animal.species == species)
+    )
+    return result.scalars().all()
+
+# OBTENER ANIMALES POR ESPECIE Y SEXO
+@router.get("/by-species-and-sex/{species}/{sex}", response_model=list[AnimalRead])
+async def animals_by_species_and_sex(species: str, sex  :str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Animal).where(Animal.species == species, Animal.sex == sex)
+    )
+    return result.scalars().all()
