@@ -19,20 +19,15 @@ class TelemetryService:
         db: AsyncSession,
         background_tasks: BackgroundTasks,
     ) -> dict:
-        """
-        1. Persist raw reading to MongoDB.
-        2. Update Device.battery_pct and Device.last_seen in Postgres.
-        3. Queue async behavior analysis every 30 readings.
-        """
-
-        # ── 1. Save to MongoDB ────────────────────────────────────────────────
+    
+        # GUARDAR LECTURA EN MONGO
         doc = payload.model_dump()
         doc["timestamp"] = payload.timestamp.replace(tzinfo=timezone.utc)
 
         result = await telemetry_collection().insert_one(doc)
         inserted_id = str(result.inserted_id)
 
-        # ── 2. Update device metadata in Postgres ─────────────────────────────
+        # GUARDAR LECTURA EN SQL (actualizar última conexión y porcentaje de batería)
         stmt = (
             update(Device)
             .where(Device.hardware_id == payload.device_hardware_id)
@@ -45,7 +40,7 @@ class TelemetryService:
         result_pg = await db.execute(stmt)
         device_row = result_pg.fetchone()
 
-        # ── 3. Queue behavior analysis every 30 readings ──────────────────────
+        # Cada 30 lecturas, lanzar un análisis de comportamiento en segundo plano
         if device_row and device_row.animal_id:
             count = await telemetry_collection().count_documents(
                 {"device_hardware_id": payload.device_hardware_id}
@@ -64,7 +59,7 @@ class TelemetryService:
         hardware_id: str,
         limit: int = 100,
     ) -> list[dict]:
-        """Fetch the last N telemetry readings for a device."""
+        # Retornar las últimas lecturas de un collar desde MongoDB
         cursor = (
             telemetry_collection()
             .find({"device_hardware_id": hardware_id})
