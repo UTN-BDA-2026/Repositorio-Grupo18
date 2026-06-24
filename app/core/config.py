@@ -9,7 +9,6 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # ── PostgreSQL ────────────────────────────────────────────────────────────
-    # Cambiado "localhost" por "postgres" (nombre del servicio en docker-compose)
     POSTGRES_HOST: str = "postgres" 
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str = "postgres"
@@ -24,7 +23,6 @@ class Settings(BaseSettings):
         )
 
     # ── MongoDB ───────────────────────────────────────────────────────────────
-    # Cambiado "localhost" por "mongo" (nombre del servicio en docker-compose)
     MONGO_HOST: str = "mongo" 
     MONGO_PORT: int = 27017
     MONGO_USER: str = "mongo"
@@ -33,15 +31,12 @@ class Settings(BaseSettings):
 
     @property
     def MONGO_URL(self) -> str:
-        # Si usás autenticación en Mongo, asegurate de pasar las credenciales en la URL.
-        # Si tu Mongo de docker no requiere user/pass, podés usar: f"mongodb://{self.MONGO_HOST}:{self.MONGO_PORT}"
         return (
             f"mongodb://{self.MONGO_USER}:{self.MONGO_PASSWORD}"
             f"@{self.MONGO_HOST}:{self.MONGO_PORT}"
         )
 
-    # ── Redis (Celery broker) ─────────────────────────────────────────────────
-    # Cambiado "localhost" por "redis" (asumiendo que tu servicio de Redis se llame así en el compose)
+    # ── Redis ─────────────────────────────────────────────────────────────────
     REDIS_HOST: str = "redis" 
     REDIS_PORT: int = 6379
 
@@ -52,10 +47,10 @@ class Settings(BaseSettings):
     # ── JWT Auth ──────────────────────────────────────────────────────────────
     SECRET_KEY: str = "change-me-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 day
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 dia
 
     # ── pgvector ──────────────────────────────────────────────────────────────
-    BEHAVIOR_VECTOR_DIM: int = 128      # dimension of behavior embeddings
+    BEHAVIOR_VECTOR_DIM: int = 128
     ALERT_SIMILARITY_THRESHOLD: float = 0.85
 
     class Config:
